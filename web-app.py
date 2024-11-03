@@ -48,38 +48,6 @@ def food_recognition():
 
             if file_extension == 'jpg' or file_extension == 'png':
                 frame = cv2.imencode('.'+file_extension, cv2.UMat(img))[1].tobytes()
-            elif file_extension == 'mp4':
-                video_path = filepath
-                cap = cv2.VideoCapture(video_path)
-
-                # get video dimensions
-                frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-                frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-
-                # define the codec and create VideoWriter object
-                fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-                out = cv2.VideoWriter('output.mp4', fourcc, 30.0, (frame_width, frame_height))
-
-                #initialise YOLO model
-                model = YOLO('insert.yolo.model.here')
-
-                while cap.isOpened():
-                    ret, frame= cap.read()
-                    if not ret:
-                        break
-
-                    # perform YOLO food recognition 
-                    results = model(frame, save=True)
-                    print(results)
-                    cv2.waitKey(1)
-
-                    # for displaying the video with the food recognition
-                    res_plotted = results[0].plot()
-                    cv2.imshow("result", res_plotted)
-
-                    # write the frame to the output video
-                    out.write(res_plotted)
-
             else: # invalid file format
                 return 0
 
